@@ -17,9 +17,11 @@ win32:!winrt {
 }
 
 # PyroWave codec library (see pyrowave/VENDOR.txt). Must match the condition
-# in app/app.pro. Linux uses libplacebo on x86_64 and arm64 (Granite has SSE and
-# NEON math backends); macOS shares MoltenVK outputs with Metal.
-win32:!winrt:contains(QT_ARCH, x86_64):!disable-pyrowave {
+# in app/app.pro. Windows builds it for x64 and ARM64 (patch 0012 gives MSVC
+# ARM64 the NEON math backend); Linux uses libplacebo on x86_64 and arm64
+# (Granite has SSE and NEON math backends); macOS shares MoltenVK outputs with
+# Metal.
+win32:!winrt:if(contains(QT_ARCH, x86_64)|contains(QT_ARCH, arm64)):!disable-pyrowave {
     SUBDIRS += pyrowave
     app.depends += pyrowave
 }
